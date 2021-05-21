@@ -6,5 +6,5 @@
   "UniqueID": "chawol.HaltEventTime",
   "EntryDll": "HaltEventTime.dll",
   "MinimumApiVersion": "3.3.0",
-  "UpdateKeys": []
+  "UpdateKeys": [ "Nexus:8774" ]
 }
