@@ -47,6 +47,7 @@ namespace HaltEventTime
             HarmonyInstance harmony = HarmonyInstance.Create("StardewValley");
             harmony.Patch(typeof(Buff).GetMethod("update"), new HarmonyMethod(typeof(BuffUpdatePatch).GetMethod(nameof(BuffUpdatePatch.Prefix))));
 #endif
+
         }
 
         public void ConsoleCommand(string command, string[] args)
@@ -153,7 +154,7 @@ namespace HaltEventTime
                 if (e.Peer.GetMod(ModManifest.UniqueID) == null)
                 {
                     string playerName = Utils.GetFarmerNameFromID(e.Peer.PlayerID);
-                    Utils.SendMessage($"{playerName} 没有安装 {ModManifest.Name} Mod", Color.Red);
+                    Utils.SendMessage(Helper.Translation.Get("message.less.mod", new { playerName = playerName, ModManifestName = ModManifest.Name }), Color.Red);
                 }
                 else
                 {
@@ -213,7 +214,6 @@ namespace HaltEventTime
                 }
                 Monitor.Log($"Task {type} stop operate executed successfully", LogLevel);
                 Utils.UpdateTaskOperate(type, TaskOperation.Remove, sender);
-                //Helper.Multiplayer.SendMessage(new TaskPacket(type, TaskOperation.Remove), nameof(TaskPacket));
             }
         }
 
