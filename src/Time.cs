@@ -29,8 +29,10 @@ namespace HaltEventTime
                     return false;
                 State = Status.Run;
             }
-            TemporarySpritesUp();
-            MonsterUp();
+            if (ModConfig.Instance.PauseTemporarySprite)
+                TemporarySpritesUp();
+            if (ModConfig.Instance.PauseMonster)
+                MonsterUp();
             Game1.gameTimeInterval = orginalTimeInterval;
             return true;
         }
@@ -46,15 +48,19 @@ namespace HaltEventTime
                 if (State == Status.Stop)
                 {
                     Game1.gameTimeInterval = 0;
-                    TemporarySpritesDown(); //基本上是0，非0的时候基本上也是个位数，也没必要异步。
-                    if (Async)
+                    if (ModConfig.Instance.PauseTemporarySprite)
+                        TemporarySpritesDown(); //基本上是0，非0的时候基本上也是个位数，也没必要异步。
+                    if (Async && ModConfig.Instance.PauseNPC && ModConfig.Instance.PauseMonster)
                     {
-                        Task.WaitAll(new Task[] { Task.Run(MonsterDown), Task.Run(NPCDownAsync) });
+                        if (ModConfig.Instance.PauseNPC && ModConfig.Instance.PauseMonster)
+                            Task.WaitAll(new Task[] { Task.Run(MonsterDown), Task.Run(NPCDownAsync) });
                     }
                     else
                     {
-                        MonsterDown();
-                        NPCDown();
+                        if (ModConfig.Instance.PauseMonster)
+                            MonsterDown();
+                        if (ModConfig.Instance.PauseNPC)
+                            NPCDown();
                     }
                     return false;
                 }

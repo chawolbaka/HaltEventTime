@@ -120,8 +120,11 @@ namespace HaltEventTime
                 //由事件发起人开启，让所有玩家的TaskList都有该任务
                 Utils.UpdateTaskOperate(Config.Limit, TaskOperation.Run, Game1.player.Name);
                 Helper.Multiplayer.SendMessage(new TaskPacket(Config.Limit, TaskOperation.Run), nameof(TaskPacket));
-                Utils.UpdateTaskOperate(TaskType.BuffControl, TaskOperation.Run, Game1.player.Name);
-                Helper.Multiplayer.SendMessage(new TaskPacket(TaskType.BuffControl, TaskOperation.Run), nameof(TaskPacket));
+                if(Config.PauseBuff)
+                {
+                    Utils.UpdateTaskOperate(TaskType.BuffControl, TaskOperation.Run, Game1.player.Name);
+                    Helper.Multiplayer.SendMessage(new TaskPacket(TaskType.BuffControl, TaskOperation.Run), nameof(TaskPacket));
+                }
             }
         }
 
@@ -139,7 +142,7 @@ namespace HaltEventTime
                 Helper.Multiplayer.SendMessage(new TaskPacket(Config.Limit, TaskOperation.Stop), nameof(TaskPacket));
                 Utils.UpdateTaskOperate(Config.Limit, TaskOperation.Stop, Game1.player.Name);
             }
-            if (TaskList.Count > 0 && TaskList.ContainsKey(TaskType.BuffControl) && TaskList[TaskType.BuffControl].Operate == TaskOperation.Run && TaskList[TaskType.BuffControl].Sender.Any(x => x == Game1.player.Name))
+            if (TaskList.Count > 0 && Config.PauseBuff && TaskList.ContainsKey(TaskType.BuffControl) && TaskList[TaskType.BuffControl].Operate == TaskOperation.Run && TaskList[TaskType.BuffControl].Sender.Any(x => x == Game1.player.Name))
             {
                 Helper.Multiplayer.SendMessage(new TaskPacket(TaskType.BuffControl, TaskOperation.Stop), nameof(TaskPacket));
                 Utils.UpdateTaskOperate(TaskType.BuffControl, TaskOperation.Stop, Game1.player.Name);
