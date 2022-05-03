@@ -1,10 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using StardewValley;
-#if HARMONY_2
 using HarmonyLib;
-#else
-using Harmony;
-#endif
+
 
 namespace HaltEventTime.Patches
 {
